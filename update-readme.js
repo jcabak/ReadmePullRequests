@@ -1,134 +1,103 @@
-const fs = require('fs');
+// Import potrzebnych modułów
 const fetch = require('node-fetch');
+const fs = require('fs').promises;
 
-const username = 'jcabak';
-const accessToken = process.env.GH_TOKEN;
-const shouldBold = true; // Set to true by default
-const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
+// Ustawienia - proszę zdefiniować swoje wartości
+const username = 'jcabak'; // Zmodyfikuj na swoją nazwę użytkownika GitHub
+const accessToken = process.env.GH_TOKEN; // Pobranie tokena dostępu z zmiennych środowiskowych
 
-async function fetchPullRequests() {
+// URL do API GitHuba dla zamkniętych Pull Requests
+const closedPRUrl = `https://api.github.com/search/issues?q=is:pr+is:closed+author:${username}&per_page=100`;
+
+// Tabela ulubionych repozytoriów
+const favoriteRepositories = [
+    'rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 
+    'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'
+];
+
+// URL do API GitHuba dla otwartych Pull Requests
+const openPRUrl = `https://api.github.com/search/issues?q=is:pr+is:open+author:${username}&per_page=20`;
+
+// Funkcja do pobierania i formatowania danych
+async function fetchAndFormatPullRequests() {
     try {
-        const openResponse = await fetch(`https://api.github.com/search/issues?q=is:pr+is:closed+author:${username}&per_page=20`, {
+        // Pobranie zamkniętych Pull Requests
+        const closedResponse = await fetch(closedPRUrl, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const closedData = await closedResponse.json();
+        const closedPRTable = formatPullRequestsTable(closedData.items, 'Closed Pull Requests');
+
+        // Pobranie otwartych Pull Requests
+        const openResponse = await fetch(openPRUrl, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
         });
         const openData = await openResponse.json();
-        const pullRequests = openData.items;
+        const openPRTable = formatPullRequestsTable(openData.items, 'Open Pull Requests');
 
-        let markdownContent = '| Icon | User | Repository | Stars | Forks | Pull Request |\n|:----|:----|:----|:----|:----|:----|\n';
-
-        for (const pullRequest of pullRequests) {
-            const repositoryOwnerAvatarUrl = await fetchRepositoryOwnerAvatar(pullRequest.repository_url);
-            const repositoryOwner = await fetchRepositoryOwner(pullRequest.repository_url);
-            const repositoryUrl = await fetchRepositoryUrl(pullRequest.repository_url);
-            const repositoryName = await fetchRepositoryName(pullRequest.repository_url);
-            const repositoryStars = await fetchRepositoryStars(pullRequest.repository_url);
-            const repositoryForks = await fetchRepositoryForks(pullRequest.repository_url);
-
-            if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
-                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequest.title}** |\n`;
-            } else {
-                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequest.title} |\n`;
-            }
-        }
-
-        const readmeContent = fs.readFileSync('README.md', 'utf8');
-        const newContent = readmeContent.replace(/<!-- PULL_REQUESTS -->[\s\S]*<!-- PULL_REQUESTS_END -->/, `<!-- PULL_REQUESTS -->\n${markdownContent}<!-- PULL_REQUESTS_END -->`);
-        fs.writeFileSync('README.md', newContent);
+        // Zwracanie sformatowanego markdowna
+        return `${favoriteRepositoriesTable()}\n\n${closedPRTable}\n\n${openPRTable}`;
     } catch (error) {
-        console.error('Error fetching pull requests:', error);
-    }
-}
-
-async function fetchRepositoryOwner(repoUrl) {
-    try {
-        const response = await fetch(repoUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const data = await response.json();
-        return data.owner.login;
-    } catch (error) {
-        console.error('Error fetching repository owner:', error);
+        console.error('Error fetching or formatting pull requests:', error);
         return '';
     }
 }
 
-async function fetchRepositoryUrl(repoUrl) {
+// Funkcja do formatowania tabeli ulubionych repozytoriów
+function favoriteRepositoriesTable() {
+    let markdownContent = `### My Favorite Repositories\n\n`;
+    markdownContent += '| Repository |\n';
+    markdownContent += '|:-----------|\n';
+
+    favoriteRepositories.forEach(repo => {
+        markdownContent += `| [${repo}](https://github.com/${repo}) |\n`;
+    });
+
+    return markdownContent;
+}
+
+// Funkcja do formatowania tabeli Pull Requests
+function formatPullRequestsTable(pullRequests, heading) {
+    let markdownContent = `### ${heading}\n\n`;
+    markdownContent += '| Icon | User | Repository | Stars | Forks | Pull Request |\n';
+    markdownContent += '|:----|:----|:----|:----|:----|:----|\n';
+
+    for (const pr of pullRequests) {
+        const repositoryUrl = pr.repository_url.replace('api.github.com/repos', 'github.com').replace('/pulls', '/pull');
+        const repositoryName = pr.repository_url.split('/').pop();
+
+        const user = pr.user.login;
+        const userUrl = `https://github.com/${user}`;
+        const userAvatar = pr.user.avatar_url;
+
+        const stars = pr.repository.stargazers_count;
+        const forks = pr.repository.forks_count;
+
+        const prTitle = pr.title;
+        const prUrl = pr.html_url;
+
+        markdownContent += `| ![User Avatar](${userAvatar}&s=30) | [${user}](${userUrl}) | [${repositoryName}](${repositoryUrl}) | ${stars} | ${forks} | [${prTitle}](${prUrl}) |\n`;
+    }
+
+    return markdownContent;
+}
+
+// Główna funkcja wykonawcza
+async function updateReadme() {
+    const markdownContent = await fetchAndFormatPullRequests();
+
+    // Zapis do pliku README.md
     try {
-        const response = await fetch(repoUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const data = await response.json();
-        return data.html_url;
+        await fs.writeFile('README.md', markdownContent);
+        console.log('README.md updated successfully.');
     } catch (error) {
-        console.error('Error fetching repository URL:', error);
-        return '';
+        console.error('Error writing to README.md:', error);
     }
 }
 
-async function fetchRepositoryName(repoUrl) {
-    try {
-        const response = await fetch(repoUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const data = await response.json();
-        return data.name;
-    } catch (error) {
-        console.error('Error fetching repository name:', error);
-        return '';
-    }
-}
-
-async function fetchRepositoryOwnerAvatar(repoUrl) {
-    try {
-        const response = await fetch(repoUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const data = await response.json();
-        return data.owner.avatar_url;
-    } catch (error) {
-        console.error('Error fetching repository owner avatar URL:', error);
-        return '';
-    }
-}
-
-async function fetchRepositoryStars(repoUrl) {
-    try {
-        const response = await fetch(repoUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const data = await response.json();
-        return data.stargazers_count;
-    } catch (error) {
-        console.error('Error fetching repository stars:', error);
-        return 0;
-    }
-}
-
-async function fetchRepositoryForks(repoUrl) {
-    try {
-        const response = await fetch(repoUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const data = await response.json();
-        return data.forks_count;
-    } catch (error) {
-        console.error('Error fetching repository forks:', error);
-        return 0;
-    }
-}
-
-fetchPullRequests();
+// Wywołanie głównej funkcji
+updateReadme();
