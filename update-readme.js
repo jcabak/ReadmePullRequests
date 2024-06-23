@@ -8,7 +8,7 @@ const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', '
 
 async function fetchPullRequests() {
     try {
-        const openResponse = await fetch(`https://api.github.com/search/issues?q=is:pr+is:open+author:${username}&per_page=20`, {
+        const openResponse = await fetch(`https://api.github.com/search/issues?q=is:pr+is:closed+author:${username}&per_page=20`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
