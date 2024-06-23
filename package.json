@@ -1,0 +1,16 @@
+{
+    "name": "update-readme",
+    "version": "1.0.0",
+    "description": "",
+    "main": "update-readme.js",
+    "dependencies": {
+      "node-fetch": "^2.6.1"
+    },
+    "devDependencies": {},
+    "scripts": {
+      "start": "node update-readme.js"
+    },
+    "author": "",
+    "license": "ISC"
+  }
+  
