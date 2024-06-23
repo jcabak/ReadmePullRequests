@@ -4,13 +4,11 @@
     "description": "",
     "main": "update-readme.js",
     "dependencies": {
-      "node-fetch": "^2.6.1"
+        "node-fetch": "^2.7.0"
     },
-    "devDependencies": {},
     "scripts": {
-      "start": "node update-readme.js"
+        "start": "node update-readme.js"
     },
     "author": "",
     "license": "ISC"
-  }
-  
+}
