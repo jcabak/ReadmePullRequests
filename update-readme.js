@@ -9,45 +9,62 @@ const ignoredUsers = ['BinaryWorlds', 'wangchucheng'];
 
 async function fetchPullRequests() {
     try {
-        const openResponse = await fetch(`https://api.github.com/search/issues?q=is:pr+is:closed+author:${username}&per_page=150`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-        const openData = await openResponse.json();
-        const pullRequests = openData.items;
+        const closedPullRequests = await fetchPullRequestsByState('closed');
+        const openPullRequests = await fetchPullRequestsByState('open');
 
-        let markdownContent = '| Icon | User | Repository | Stars | Forks | Pull Request |\n|:----|:----|:----|:----|:----|:----|\n';
-
-        for (const pullRequest of pullRequests) {
-            const repositoryOwnerAvatarUrl = await fetchRepositoryOwnerAvatar(pullRequest.repository_url);
-            const repositoryOwner = await fetchRepositoryOwner(pullRequest.repository_url);
-
-            // Ignore the repository if the owner is in the ignoredUsers list
-            if (ignoredUsers.includes(repositoryOwner)) {
-                continue;
-            }
-
-            const repositoryUrl = await fetchRepositoryUrl(pullRequest.repository_url);
-            const repositoryName = await fetchRepositoryName(pullRequest.repository_url);
-            const repositoryStars = await fetchRepositoryStars(pullRequest.repository_url);
-            const repositoryForks = await fetchRepositoryForks(pullRequest.repository_url);
-
-            const repositoryOwnerUrl = `https://github.com/${repositoryOwner}`;
-
-            if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
-                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequest.title}** |\n`;
-            } else {
-                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequest.title} |\n`;
-            }
-        }
+        const closedMarkdownContent = await generateMarkdownTable(closedPullRequests, 'Closed Pull Requests');
+        const openMarkdownContent = await generateMarkdownTable(openPullRequests, 'Open Pull Requests');
 
         const readmeContent = fs.readFileSync('README.md', 'utf8');
-        const newContent = readmeContent.replace(/<!-- PULL_REQUESTS -->[\s\S]*<!-- PULL_REQUESTS_END -->/, `<!-- PULL_REQUESTS -->\n${markdownContent}<!-- PULL_REQUESTS_END -->`);
+        const newContent = readmeContent.replace(/<!-- PULL_REQUESTS -->[\s\S]*<!-- PULL_REQUESTS_END -->/, `<!-- PULL_REQUESTS -->\n${closedMarkdownContent}\n${openMarkdownContent}<!-- PULL_REQUESTS_END -->`);
         fs.writeFileSync('README.md', newContent);
     } catch (error) {
         console.error('Error fetching pull requests:', error);
     }
+}
+
+async function fetchPullRequestsByState(state) {
+    try {
+        const response = await fetch(`https://api.github.com/search/issues?q=is:pr+is:${state}+author:${username}&per_page=150`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        const data = await response.json();
+        return data.items;
+    } catch (error) {
+        console.error(`Error fetching ${state} pull requests:`, error);
+        return [];
+    }
+}
+
+async function generateMarkdownTable(pullRequests, title) {
+    let markdownContent = `## ${title}\n\n| Icon | User | Repository | Stars | Forks | Pull Request |\n|:----|:----|:----|:----|:----|:----|\n`;
+
+    for (const pullRequest of pullRequests) {
+        const repositoryOwnerAvatarUrl = await fetchRepositoryOwnerAvatar(pullRequest.repository_url);
+        const repositoryOwner = await fetchRepositoryOwner(pullRequest.repository_url);
+
+        // Ignore the repository if the owner is in the ignoredUsers list
+        if (ignoredUsers.includes(repositoryOwner)) {
+            continue;
+        }
+
+        const repositoryUrl = await fetchRepositoryUrl(pullRequest.repository_url);
+        const repositoryName = await fetchRepositoryName(pullRequest.repository_url);
+        const repositoryStars = await fetchRepositoryStars(pullRequest.repository_url);
+        const repositoryForks = await fetchRepositoryForks(pullRequest.repository_url);
+
+        const repositoryOwnerUrl = `https://github.com/${repositoryOwner}`;
+
+        if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
+            markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequest.title}** |\n`;
+        } else {
+            markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequest.title} |\n`;
+        }
+    }
+
+    return markdownContent;
 }
 
 async function fetchRepositoryOwner(repoUrl) {
