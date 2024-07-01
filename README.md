@@ -1,6 +1,8 @@
 # My GitHub Profile
 
 <!-- PULL_REQUESTS -->
+## Closed Pull Requests
+
 | Icon | User | Repository | Stars | Forks | Pull Request |
 |:----|:----|:----|:----|:----|:----|
 | <img src="https://avatars.githubusercontent.com/u/13131?v=4" alt="Logo basecamp" width="30" height="30"> | [**basecamp**](https://github.com/basecamp) | [**kamal-site**](https://github.com/basecamp/kamal-site) | **41** | **46** | **Added subtitles for video** |
@@ -57,4 +59,14 @@
 | <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [website](https://github.com/responsively-org/website) | 18 | 31 | Reduces images file sizes |
 | <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [website](https://github.com/responsively-org/website) | 18 | 31 | Accessibility improved |
 | <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [responsively-app](https://github.com/responsively-org/responsively-app) | 21987 | 1094 | Add tooltip to icons on left panel |
+
+## Open Pull Requests
+
+| Icon | User | Repository | Stars | Forks | Pull Request |
+|:----|:----|:----|:----|:----|:----|
+| <img src="https://avatars.githubusercontent.com/u/379216?v=4" alt="Logo w3c" width="30" height="30"> | [**w3c**](https://github.com/w3c) | [**w3c.github.io**](https://github.com/w3c/w3c.github.io) | **137** | **37** | **Performance improvement** |
+| <img src="https://avatars.githubusercontent.com/u/51910064?v=4" alt="Logo simple-login" width="30" height="30"> | [simple-login](https://github.com/simple-login) | [website](https://github.com/simple-login/website) | 40 | 34 | Added Polish translation |
+| <img src="https://avatars.githubusercontent.com/u/53786759?v=4" alt="Logo govtech-polska" width="30" height="30"> | [govtech-polska](https://github.com/govtech-polska) | [fact_checking_portal](https://github.com/govtech-polska/fact_checking_portal) | 1 | 2 | Accessibility improvements |
+| <img src="https://avatars.githubusercontent.com/u/9289019?v=4" alt="Logo letsencrypt" width="30" height="30"> | [letsencrypt](https://github.com/letsencrypt) | [website](https://github.com/letsencrypt/website) | 830 | 570 | Accessibility and SEO improvements |
+| <img src="https://avatars.githubusercontent.com/u/35151645?v=4" alt="Logo iina" width="30" height="30"> | [iina](https://github.com/iina) | [iina-website](https://github.com/iina/iina-website) | 121 | 28 | Accessibility and SEO improvements |
 <!-- PULL_REQUESTS_END -->
