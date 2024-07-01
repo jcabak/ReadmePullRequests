@@ -5,6 +5,7 @@ const username = 'jcabak';
 const accessToken = process.env.GH_TOKEN;
 const shouldBold = true; // Set to true by default
 const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
+const ignoredUsers = ['BinaryWorlds', 'wangchucheng'];
 
 async function fetchPullRequests() {
     try {
@@ -21,15 +22,23 @@ async function fetchPullRequests() {
         for (const pullRequest of pullRequests) {
             const repositoryOwnerAvatarUrl = await fetchRepositoryOwnerAvatar(pullRequest.repository_url);
             const repositoryOwner = await fetchRepositoryOwner(pullRequest.repository_url);
+
+            // Ignore the repository if the owner is in the ignoredUsers list
+            if (ignoredUsers.includes(repositoryOwner)) {
+                continue;
+            }
+
             const repositoryUrl = await fetchRepositoryUrl(pullRequest.repository_url);
             const repositoryName = await fetchRepositoryName(pullRequest.repository_url);
             const repositoryStars = await fetchRepositoryStars(pullRequest.repository_url);
             const repositoryForks = await fetchRepositoryForks(pullRequest.repository_url);
 
+            const repositoryOwnerUrl = `https://github.com/${repositoryOwner}`;
+
             if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
-                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequest.title}** |\n`;
+                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequest.title}** |\n`;
             } else {
-                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequest.title} |\n`;
+                markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequest.title} |\n`;
             }
         }
 
