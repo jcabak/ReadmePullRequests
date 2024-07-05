@@ -4,8 +4,9 @@ const fetch = require('node-fetch');
 const username = 'jcabak';
 const accessToken = process.env.GH_TOKEN;
 const shouldBold = true; // Set to true by default
+const includePullRequestLinks = true; // New variable to include pull request links
 const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
-const ignoredUsers = ['BinaryWorlds', 'wangchucheng'];
+const ignoredUsers = ['BinaryWorlds', 'LukasJoswiak'];
 
 async function fetchPullRequests() {
     try {
@@ -56,11 +57,14 @@ async function generateMarkdownTable(pullRequests, title) {
         const repositoryForks = await fetchRepositoryForks(pullRequest.repository_url);
 
         const repositoryOwnerUrl = `https://github.com/${repositoryOwner}`;
+        const pullRequestLink = pullRequest.html_url; // Get the pull request link
+
+        const pullRequestColumnContent = includePullRequestLinks ? `[${pullRequest.title}](${pullRequestLink})` : pullRequest.title;
 
         if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
-            markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequest.title}** |\n`;
+            markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequestColumnContent}** |\n`;
         } else {
-            markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequest.title} |\n`;
+            markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequestColumnContent} |\n`;
         }
     }
 
