@@ -3,8 +3,8 @@ const fetch = require('node-fetch');
 
 const username = 'jcabak';
 const accessToken = process.env.GH_TOKEN;
-const shouldBold = true; // Set to true by default
-const includePullRequestLinks = true; // New variable to include pull request links
+const shouldBold = true; // bold favoriteRepositories
+const includePullRequestLinks = false; // make url to specific pull request
 const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
 const ignoredUsers = ['BinaryWorlds', 'LukasJoswiak'];
 
