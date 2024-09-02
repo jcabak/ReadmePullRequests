@@ -81,7 +81,7 @@ jobs:
         with:
           shouldBold: true
           includePullRequestLinks: false
-          favoriteRepositories : []'rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'
+          favoriteRepositories : ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp']
           ignoredUsers: ['BinaryWorlds', 'LukasJoswiak'];
 ```
 
