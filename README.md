@@ -14,7 +14,77 @@ These features make the workflow highly flexible, allowing you to tailor the con
 
 ## Instructions
 
-1. Add the comment `<!-- PULL_REQUESTS -->
+1. Add the comment `<!-- PULL_REQUESTS -->` (entry point) within `README.md`. 
+
+2. Now you have to create a workflow file.
+
+`.github/workflows/ReadmePullRequests.yml`
+
+```yml
+name: Update ReadmePullRequests
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Update this repo's README with recent activity
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jcabak/ReadmePullRequests@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+3. Create a GitHub token. You have to create a [personal access token](https://github.com/settings/tokens?type=beta). You can find more information [here](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
+
+4. Go to your repository > Settings > Secrets and variables > Actions > New repository secret  Secret part of repository for using it and call it as `GH_TOKEN` and paste your token in the value part.
+
+
+The above job runs every half an hour, you can change it as you wish based on the [cron syntax](https://jasonet.co/posts/scheduled-actions/#the-cron-syntax).
+
+
+### Override defaults
+
+Use the following `input params` to customize it for your use case:-
+
+| Input Param | Default Value | Description |
+|--------|--------|--------|
+| `shouldBold` | true | bold favorite repositories |
+| `includePullRequestLinks` | false | make url to specific pull request |
+| `favoriteRepositories` | null | table for favorites users |
+| `ignoredUsers` | null | table for ignored users |
+
+
+```yml
+name: Update ReadmePullRequests
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Update this repo's README with recent activity
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jcabak/ReadmePullRequests@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          shouldBold: true
+          includePullRequestLinks: false
+          favoriteRepositories : []'rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'
+          ignoredUsers: ['BinaryWorlds', 'LukasJoswiak'];
+```
+
 ## Closed Pull Requests
 
 | Icon | User | Repository | Stars | Forks | Pull Request |
