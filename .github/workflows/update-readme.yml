@@ -11,12 +11,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # Zaktualizowane do v3
+      uses: actions/checkout@v3
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3  # Zaktualizowane do v3
+      uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Ustawiona wersja Node.js na 20
+        node-version: '20'
 
     - name: Install dependencies
       run: npm install node-fetch@2
@@ -30,7 +30,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add README.md package.json  # Dodanie zmodyfikowanych plików bez package-lock.json
+        git add README.md package.json
         git commit -m 'Update README with latest pull requests'
         git push
       env:
