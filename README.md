@@ -14,81 +14,7 @@ These features make the workflow highly flexible, allowing you to tailor the con
 
 ## Instructions
 
-1. Add the comment `<!-- PULL_REQUESTS -->` (entry point) within `README.md`. 
-
-2. Now you have to create a workflow file.
-
-`.github/workflows/update-readme.yml`
-
-```yml
-name: Update ReadmePullRequests
-
-on:
-  schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Update this repo's README with recent activity
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: jcabak/ReadmePullRequests@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-3. Create a GitHub token. You have to create a [personal access token](https://github.com/settings/tokens?type=beta). You can find more information [here](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
-
-4. Go to your repository > Settings > Secrets and variables > Actions > New repository secret  Secret part of repository for using it and call it as `GH_TOKEN` and paste your token in the value part.
-
-
-The above job runs every half an hour, you can change it as you wish based on the [cron syntax](https://jasonet.co/posts/scheduled-actions/#the-cron-syntax).
-
-
-### Override defaults
-
-Use the following `input params` to customize it for your use case:-
-
-| Input Param | Default Value | Description |
-|--------|--------|--------|
-| `shouldBold` | true | bold favorite repositories |
-| `includePullRequestLinks` | false | make url to specific pull request |
-| `favoriteRepositories` | null | table for favorites users |
-| `ignoredUsers` | null | table for ignored users |
-
-
-```yml
-name: Update ReadmePullRequests
-
-on:
-  schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Update this repo's README with recent activity
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: jcabak/ReadmePullRequests@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          shouldBold: true
-          includePullRequestLinks: false
-          favoriteRepositories : []'rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'
-          ignoredUsers: ['BinaryWorlds', 'LukasJoswiak'];
-```
-
-
-# My GitHub Profile
-
-<!-- PULL_REQUESTS -->
+1. Add the comment `<!-- PULL_REQUESTS -->
 ## Closed Pull Requests
 
 | Icon | User | Repository | Stars | Forks | Pull Request |
@@ -99,7 +25,7 @@ jobs:
 | <img src="https://avatars.githubusercontent.com/u/923885?v=4" alt="Logo inclusive-design" width="30" height="30"> | [inclusive-design](https://github.com/inclusive-design) | [wecount.inclusivedesign.ca](https://github.com/inclusive-design/wecount.inclusivedesign.ca) | 8 | 20 | fix: sufficient contrast (resolves #1739) |
 | <img src="https://avatars.githubusercontent.com/u/51910064?v=4" alt="Logo simple-login" width="30" height="30"> | [simple-login](https://github.com/simple-login) | [website](https://github.com/simple-login/website) | 41 | 33 | Added variables. Texts were permanently assigned. |
 | <img src="https://avatars.githubusercontent.com/u/4223?v=4" alt="Logo rails" width="30" height="30"> | [**rails**](https://github.com/rails) | [**website**](https://github.com/rails/website) | **68** | **96** | **Accessibility and Performance improvements** |
-| <img src="https://avatars.githubusercontent.com/u/14127308?v=4" alt="Logo EbookFoundation" width="30" height="30"> | [EbookFoundation](https://github.com/EbookFoundation) | [free-programming-books](https://github.com/EbookFoundation/free-programming-books) | 332965 | 61061 | fix typo |
+| <img src="https://avatars.githubusercontent.com/u/14127308?v=4" alt="Logo EbookFoundation" width="30" height="30"> | [EbookFoundation](https://github.com/EbookFoundation) | [free-programming-books](https://github.com/EbookFoundation/free-programming-books) | 332974 | 61062 | fix typo |
 | <img src="https://avatars.githubusercontent.com/u/6154722?v=4" alt="Logo microsoft" width="30" height="30"> | [**microsoft**](https://github.com/microsoft) | [**TypeScript-Website**](https://github.com/microsoft/TypeScript-Website) | **2206** | **1354** | **Performance improvement** |
 | <img src="https://avatars.githubusercontent.com/u/751633?v=4" alt="Logo joomla" width="30" height="30"> | [joomla](https://github.com/joomla) | [accessibility](https://github.com/joomla/accessibility) | 8 | 12 | fix typos |
 | <img src="https://avatars.githubusercontent.com/u/126906955?v=4" alt="Logo irdpl" width="30" height="30"> | [irdpl](https://github.com/irdpl) | [irdpl.github.io](https://github.com/irdpl/irdpl.github.io) | 0 | 1 | Accessibility improvements |
@@ -110,14 +36,14 @@ jobs:
 | <img src="https://avatars.githubusercontent.com/u/29385237?v=4" alt="Logo gohugoio" width="30" height="30"> | [gohugoio](https://github.com/gohugoio) | [hugoDocs](https://github.com/gohugoio/hugoDocs) | 1044 | 1485 | Update editors.md |
 | <img src="https://avatars.githubusercontent.com/u/38217527?v=4" alt="Logo homebridge" width="30" height="30"> | [homebridge](https://github.com/homebridge) | [homebridge.io](https://github.com/homebridge/homebridge.io) | 9 | 5 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/42816656?v=4" alt="Logo swiftlang" width="30" height="30"> | [swiftlang](https://github.com/swiftlang) | [swift-org-website](https://github.com/swiftlang/swift-org-website) | 471 | 178 | SEO improvement |
-| <img src="https://avatars.githubusercontent.com/u/4527441?v=4" alt="Logo alextselegidis" width="30" height="30"> | [alextselegidis](https://github.com/alextselegidis) | [easyappointments](https://github.com/alextselegidis/easyappointments) | 3233 | 1242 | Update Polish language |
+| <img src="https://avatars.githubusercontent.com/u/4527441?v=4" alt="Logo alextselegidis" width="30" height="30"> | [alextselegidis](https://github.com/alextselegidis) | [easyappointments](https://github.com/alextselegidis/easyappointments) | 3233 | 1241 | Update Polish language |
 | <img src="https://avatars.githubusercontent.com/u/9919?v=4" alt="Logo github" width="30" height="30"> | [github](https://github.com/github) | [government.github.com](https://github.com/github/government.github.com) | 1717 | 975 | Performance and SEO improvements |
-| <img src="https://avatars.githubusercontent.com/u/13844975?v=4" alt="Logo home-assistant" width="30" height="30"> | [**home-assistant**](https://github.com/home-assistant) | [**home-assistant.io**](https://github.com/home-assistant/home-assistant.io) | **4737** | **7171** | **Accessibility and SEO improvements** |
+| <img src="https://avatars.githubusercontent.com/u/13844975?v=4" alt="Logo home-assistant" width="30" height="30"> | [**home-assistant**](https://github.com/home-assistant) | [**home-assistant.io**](https://github.com/home-assistant/home-assistant.io) | **4738** | **7171** | **Accessibility and SEO improvements** |
 | <img src="https://avatars.githubusercontent.com/u/1342004?v=4" alt="Logo google" width="30" height="30"> | [**google**](https://github.com/google) | [**certificate-transparency-community-site**](https://github.com/google/certificate-transparency-community-site) | **100** | **62** | **Performance improvement** |
 | <img src="https://avatars.githubusercontent.com/u/9919?v=4" alt="Logo github" width="30" height="30"> | [github](https://github.com/github) | [training-kit](https://github.com/github/training-kit) | 4258 | 4331 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/13096?v=4" alt="Logo niw" width="30" height="30"> | [niw](https://github.com/niw) | [HapticKey](https://github.com/niw/HapticKey) | 1649 | 62 | Polish localization |
 | <img src="https://avatars.githubusercontent.com/u/1294177?v=4" alt="Logo raspberrypi" width="30" height="30"> | [raspberrypi](https://github.com/raspberrypi) | [documentation](https://github.com/raspberrypi/documentation) | 5186 | 1992 | Accessibility and SEO improvements |
-| <img src="https://avatars.githubusercontent.com/u/50278?v=4" alt="Logo twitter" width="30" height="30"> | [**twitter**](https://github.com/twitter) | [**opensource-website**](https://github.com/twitter/opensource-website) | **2993** | **803** | **Performance, Accessibility and SEO improvements** |
+| <img src="https://avatars.githubusercontent.com/u/50278?v=4" alt="Logo twitter" width="30" height="30"> | [**twitter**](https://github.com/twitter) | [**opensource-website**](https://github.com/twitter/opensource-website) | **2993** | **804** | **Performance, Accessibility and SEO improvements** |
 | <img src="https://avatars.githubusercontent.com/u/47399700?v=4" alt="Logo instantpage" width="30" height="30"> | [instantpage](https://github.com/instantpage) | [instant.page-site](https://github.com/instantpage/instant.page-site) | 13 | 2 | Core Web Vitals Optimization |
 | <img src="https://avatars.githubusercontent.com/u/131524?v=4" alt="Logo mozilla" width="30" height="30"> | [**mozilla**](https://github.com/mozilla) | [**webext-compat-tool**](https://github.com/mozilla/webext-compat-tool) | **12** | **19** | **Accessibility and SEO improvements** |
 | <img src="https://avatars.githubusercontent.com/u/131524?v=4" alt="Logo mozilla" width="30" height="30"> | [**mozilla**](https://github.com/mozilla) | [**extension-workshop**](https://github.com/mozilla/extension-workshop) | **96** | **129** | **Text remains visible during webfont load** |
@@ -127,11 +53,11 @@ jobs:
 | <img src="https://avatars.githubusercontent.com/u/69631?v=4" alt="Logo facebook" width="30" height="30"> | [**facebook**](https://github.com/facebook) | [**metro**](https://github.com/facebook/metro) | **5159** | **613** | **Accessibility improvement** |
 | <img src="https://avatars.githubusercontent.com/u/69631?v=4" alt="Logo facebook" width="30" height="30"> | [**facebook**](https://github.com/facebook) | [**react-native-website**](https://github.com/facebook/react-native-website) | **1931** | **4352** | **Accessibility improvement** |
 | <img src="https://avatars.githubusercontent.com/u/46310316?v=4" alt="Logo gethugothemes" width="30" height="30"> | [gethugothemes](https://github.com/gethugothemes) | [dot-hugo](https://github.com/gethugothemes/dot-hugo) | 260 | 148 | Accessibility and SEO improvements |
-| <img src="https://avatars.githubusercontent.com/u/13369712?v=4" alt="Logo nanxiaobei" width="30" height="30"> | [nanxiaobei](https://github.com/nanxiaobei) | [hugo-paper](https://github.com/nanxiaobei/hugo-paper) | 2091 | 486 | Added i18n translation - Polish |
+| <img src="https://avatars.githubusercontent.com/u/13369712?v=4" alt="Logo nanxiaobei" width="30" height="30"> | [nanxiaobei](https://github.com/nanxiaobei) | [hugo-paper](https://github.com/nanxiaobei/hugo-paper) | 2090 | 486 | Added i18n translation - Polish |
 | <img src="https://avatars.githubusercontent.com/u/29385237?v=4" alt="Logo gohugoio" width="30" height="30"> | [gohugoio](https://github.com/gohugoio) | [hugoDocs](https://github.com/gohugoio/hugoDocs) | 1044 | 1485 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/31970254?v=4" alt="Logo GoogleChromeLabs" width="30" height="30"> | [GoogleChromeLabs](https://github.com/GoogleChromeLabs) | [quicklink](https://github.com/GoogleChromeLabs/quicklink) | 11004 | 403 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/31970254?v=4" alt="Logo GoogleChromeLabs" width="30" height="30"> | [GoogleChromeLabs](https://github.com/GoogleChromeLabs) | [quicklink](https://github.com/GoogleChromeLabs/quicklink) | 11004 | 403 | Accessibility and SEO improvements |
-| <img src="https://avatars.githubusercontent.com/u/73735083?v=4" alt="Logo hugo-toha" width="30" height="30"> | [hugo-toha](https://github.com/hugo-toha) | [toha](https://github.com/hugo-toha/toha) | 1010 | 573 | Accessibility and SEO improvements |
+| <img src="https://avatars.githubusercontent.com/u/73735083?v=4" alt="Logo hugo-toha" width="30" height="30"> | [hugo-toha](https://github.com/hugo-toha) | [toha](https://github.com/hugo-toha/toha) | 1009 | 573 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/46310316?v=4" alt="Logo gethugothemes" width="30" height="30"> | [gethugothemes](https://github.com/gethugothemes) | [bigspring-light-hugo](https://github.com/gethugothemes/bigspring-light-hugo) | 198 | 298 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/38368052?v=4" alt="Logo wangchucheng" width="30" height="30"> | [wangchucheng](https://github.com/wangchucheng) | [hugo-eureka](https://github.com/wangchucheng/hugo-eureka) | 918 | 192 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/38368052?v=4" alt="Logo wangchucheng" width="30" height="30"> | [wangchucheng](https://github.com/wangchucheng) | [hugo-eureka](https://github.com/wangchucheng/hugo-eureka) | 918 | 192 | add polish i18n support |
@@ -140,7 +66,7 @@ jobs:
 | <img src="https://avatars.githubusercontent.com/u/6861120?v=4" alt="Logo michalczukm" width="30" height="30"> | [michalczukm](https://github.com/michalczukm) | [michalczukm.xyz](https://github.com/michalczukm/michalczukm.xyz) | 0 | 1 | Accessibility improvements |
 | <img src="https://avatars.githubusercontent.com/u/23409060?v=4" alt="Logo ojroques" width="30" height="30"> | [ojroques](https://github.com/ojroques) | [hugo-researcher](https://github.com/ojroques/hugo-researcher) | 228 | 130 | Accessibility and SEO improvements |
 | <img src="https://avatars.githubusercontent.com/u/830714?v=4" alt="Logo escalate" width="30" height="30"> | [escalate](https://github.com/escalate) | [hugo-split-theme](https://github.com/escalate/hugo-split-theme) | 74 | 83 | Accessibility and SEO improvements |
-| <img src="https://avatars.githubusercontent.com/u/1778935?v=4" alt="Logo GoogleChrome" width="30" height="30"> | [**GoogleChrome**](https://github.com/GoogleChrome) | [**workbox**](https://github.com/GoogleChrome/workbox) | **12257** | **804** | **Update README.md** |
+| <img src="https://avatars.githubusercontent.com/u/1778935?v=4" alt="Logo GoogleChrome" width="30" height="30"> | [**GoogleChrome**](https://github.com/GoogleChrome) | [**workbox**](https://github.com/GoogleChrome/workbox) | **12258** | **804** | **Update README.md** |
 | <img src="https://avatars.githubusercontent.com/u/1342004?v=4" alt="Logo google" width="30" height="30"> | [**google**](https://github.com/google) | [**certificate-transparency-community-site**](https://github.com/google/certificate-transparency-community-site) | **100** | **62** | **Accessibility and SEO improvements** |
 | <img src="https://avatars.githubusercontent.com/u/170270?v=4" alt="Logo sindresorhus" width="30" height="30"> | [sindresorhus](https://github.com/sindresorhus) | [caprine](https://github.com/sindresorhus/caprine) | 6985 | 550 | Fix "Hide Names and Avatars" |
 | <img src="https://avatars.githubusercontent.com/u/6154722?v=4" alt="Logo microsoft" width="30" height="30"> | [**microsoft**](https://github.com/microsoft) | [**TypeScript-Website-Localizations**](https://github.com/microsoft/TypeScript-Website-Localizations) | **118** | **128** | **fix typo** |
@@ -148,7 +74,7 @@ jobs:
 | <img src="https://avatars.githubusercontent.com/u/1778935?v=4" alt="Logo GoogleChrome" width="30" height="30"> | [**GoogleChrome**](https://github.com/GoogleChrome) | [**developer.chrome.com**](https://github.com/GoogleChrome/developer.chrome.com) | **1663** | **1578** | **Accessibility improved** |
 | <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [website](https://github.com/responsively-org/website) | 18 | 32 | Reduces images file sizes |
 | <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [website](https://github.com/responsively-org/website) | 18 | 32 | Accessibility improved |
-| <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [responsively-app](https://github.com/responsively-org/responsively-app) | 22263 | 1124 | Add tooltip to icons on left panel |
+| <img src="https://avatars.githubusercontent.com/u/69102126?v=4" alt="Logo responsively-org" width="30" height="30"> | [responsively-org](https://github.com/responsively-org) | [responsively-app](https://github.com/responsively-org/responsively-app) | 22264 | 1124 | Add tooltip to icons on left panel |
 
 ## Open Pull Requests
 
