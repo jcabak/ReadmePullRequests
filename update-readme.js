@@ -7,17 +7,22 @@ const shouldBold = true; // bold favoriteRepositories
 const includePullRequestLinks = false; // make url to specific pull request
 const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
 const ignoredUsers = ['BinaryWorlds', 'LukasJoswiak'];
+const show_open_pull_requests = true;
+const show_closed_pull_requests = true;
 
 async function fetchPullRequests() {
     try {
         const closedPullRequests = await fetchPullRequestsByState('closed');
         const openPullRequests = await fetchPullRequestsByState('open');
 
-        const closedMarkdownContent = await generateMarkdownTable(closedPullRequests, 'Closed Pull Requests');
-        const openMarkdownContent = await generateMarkdownTable(openPullRequests, 'Open Pull Requests');
+        const closedMarkdownContent = show_closed_pull_requests ? await generateMarkdownTable(closedPullRequests, 'Closed Pull Requests') : '';
+        const openMarkdownContent = show_open_pull_requests ? await generateMarkdownTable(openPullRequests, 'Open Pull Requests') : '';
 
         const readmeContent = fs.readFileSync('README.md', 'utf8');
-        const newContent = readmeContent.replace(/<!-- PULL_REQUESTS -->[\s\S]*<!-- PULL_REQUESTS_END -->/, `<!-- PULL_REQUESTS -->\n${closedMarkdownContent}\n${openMarkdownContent}<!-- PULL_REQUESTS_END -->`);
+        const newContent = readmeContent
+            .replace(/<!-- CLOSED_PULL_REQUESTS_START -->[\s\S]*<!-- CLOSED_PULL_REQUESTS_END -->/, `<!-- CLOSED_PULL_REQUESTS_START -->\n${closedMarkdownContent}\n<!-- CLOSED_PULL_REQUESTS_END -->`)
+            .replace(/<!-- OPEN_PULL_REQUESTS_START -->[\s\S]*<!-- OPEN_PULL_REQUESTS_END -->/, `<!-- OPEN_PULL_REQUESTS_START -->\n${openMarkdownContent}\n<!-- OPEN_PULL_REQUESTS_END -->`);
+
         fs.writeFileSync('README.md', newContent);
     } catch (error) {
         console.error('Error fetching pull requests:', error);
@@ -40,7 +45,7 @@ async function fetchPullRequestsByState(state) {
 }
 
 async function generateMarkdownTable(pullRequests, title) {
-    let markdownContent = `## ${title}\n\n| Icon | User | Repository | Stars | Forks | Pull Request |\n|:----|:----|:----|:----|:----|:----|\n`;
+    let markdownContent = `| Icon | User | Repository | Stars | Forks | Pull Request |\n|:----|:----|:----|:----|:----|:----|\n`;
 
     for (const pullRequest of pullRequests) {
         const repositoryOwnerAvatarUrl = await fetchRepositoryOwnerAvatar(pullRequest.repository_url);
