@@ -1,23 +1,39 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
+const yaml = require('js-yaml');
 
-const username = 'jcabak';
-const accessToken = process.env.GH_TOKEN;
-const shouldBold = true; // bold favoriteRepositories
-const includePullRequestLinks = false; // make url to specific pull request
-const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
-const ignoredUsers = ['BinaryWorlds', 'LukasJoswiak'];
+// Załaduj konfigurację z pliku YAML
+const config = yaml.load(fs.readFileSync('./.github/ReadmePullRequests.config.yml', 'utf8'));
+
+const username = config.username;
+const accessToken = config.accessToken || process.env.GH_TOKEN;
+const boldFavorite = config.boldFavorite;
+const includePullRequestLinks = config.includePullRequestLinks;
+const favoriteRepositories = config.favoriteRepositories;
+const ignoredUsers = config.ignoredUsers;
+const displayClosedPullRequests = config.displayClosedPullRequests;
+const displayOpenPullRequests = config.displayOpenPullRequests;
 
 async function fetchPullRequests() {
     try {
-        const closedPullRequests = await fetchPullRequestsByState('closed');
-        const openPullRequests = await fetchPullRequestsByState('open');
+        let closedMarkdownContent = '';
+        let openMarkdownContent = '';
 
-        const closedMarkdownContent = await generateMarkdownTable(closedPullRequests, 'Closed Pull Requests');
-        const openMarkdownContent = await generateMarkdownTable(openPullRequests, 'Open Pull Requests');
+        if (displayClosedPullRequests) {
+            const closedPullRequests = await fetchPullRequestsByState('closed');
+            closedMarkdownContent = await generateMarkdownTable(closedPullRequests, 'Closed Pull Requests');
+        }
+
+        if (displayOpenPullRequests) {
+            const openPullRequests = await fetchPullRequestsByState('open');
+            openMarkdownContent = await generateMarkdownTable(openPullRequests, 'Open Pull Requests');
+        }
 
         const readmeContent = fs.readFileSync('README.md', 'utf8');
-        const newContent = readmeContent.replace(/<!-- PULL_REQUESTS -->[\s\S]*<!-- PULL_REQUESTS_END -->/, `<!-- PULL_REQUESTS -->\n${closedMarkdownContent}\n${openMarkdownContent}<!-- PULL_REQUESTS_END -->`);
+        const newContent = readmeContent
+            .replace(/<!-- CLOSED_PULL_REQUESTS_START -->[\s\S]*<!-- CLOSED_PULL_REQUESTS_END -->/, `<!-- CLOSED_PULL_REQUESTS_START -->\n${closedMarkdownContent}<!-- CLOSED_PULL_REQUESTS_END -->`)
+            .replace(/<!-- OPEN_PULL_REQUESTS_START -->[\s\S]*<!-- OPEN_PULL_REQUESTS_END -->/, `<!-- OPEN_PULL_REQUESTS_START -->\n${openMarkdownContent}<!-- OPEN_PULL_REQUESTS_END -->`);
+        
         fs.writeFileSync('README.md', newContent);
     } catch (error) {
         console.error('Error fetching pull requests:', error);
@@ -61,7 +77,7 @@ async function generateMarkdownTable(pullRequests, title) {
 
         const pullRequestColumnContent = includePullRequestLinks ? `[${pullRequest.title}](${pullRequestLink})` : pullRequest.title;
 
-        if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
+        if (boldFavorite && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
             markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequestColumnContent}** |\n`;
         } else {
             markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequestColumnContent} |\n`;

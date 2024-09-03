@@ -1,0 +1,23 @@
+username: 'jcabak'
+accessToken: '${{ secrets.GH_TOKEN }}'
+displayClosedPullRequests: true
+displayOpenPullRequests: true
+boldFavorite: true
+includePullRequestLinks: false
+favoriteRepositories:
+  - rails
+  - microsoft
+  - apple
+  - home-assistant
+  - google
+  - raspberry
+  - twitter
+  - mozilla
+  - facebook
+  - googlechrome
+  - nasa
+  - w3c
+  - basecamp
+ignoredUsers:
+  - BinaryWorlds
+  - LukasJoswiak
