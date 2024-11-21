@@ -88,6 +88,12 @@ jobs:
 ## Closed Pull Requests
 <!-- CLOSED_PULL_REQUESTS_START -->
 | Icon | User | Repository | Stars | Forks | Pull Request |
+|:----|:----|:----|:----|:----|:----|
+| <img src="https://avatars.githubusercontent.com/u/13131?v=4" alt="Logo basecamp" width="30" height="30"> | [**basecamp**](https://github.com/basecamp) | [**kamal-site**](https://github.com/basecamp/kamal-site) | **57** | **79** | **Added subtitles for video** |
+| <img src="https://avatars.githubusercontent.com/u/13131?v=4" alt="Logo basecamp" width="30" height="30"> | [**basecamp**](https://github.com/basecamp) | [**kamal-site**](https://github.com/basecamp/kamal-site) | **57** | **79** | **Accessibility and Performance improvements** |
+| <img src="https://avatars.githubusercontent.com/u/379216?v=4" alt="Logo w3c" width="30" height="30"> | [**w3c**](https://github.com/w3c) | [**w3c.github.io**](https://github.com/w3c/w3c.github.io) | **144** | **39** | **Performance improvement** |
+| <img src="https://avatars.githubusercontent.com/u/1506386?v=4" alt="Logo Orange-OpenSource" width="30" height="30"> | [Orange-OpenSource](https://github.com/Orange-OpenSource) | [Orange-Confort-plus](https://github.com/Orange-OpenSource/Orange-Confort-plus) | 42 | 25 | fix typos |
+| <img src="https://avatars.githubusercontent.com/u/923885?v=4" alt="Logo inclusive-design" width="30" height="30"> | [inclusive-design](https://github.com/inclusive-design) | [wecount.inclusivedesign.ca](https://github.com/inclusive-design/wecount.inclusivedesign.ca) | 8 | 20 | fix: sufficient contrast (resolves #1739) |
 | <img src="https://avatars.githubusercontent.com/u/51910064?v=4" alt="Logo simple-login" width="30" height="30"> | [simple-login](https://github.com/simple-login) | [website](https://github.com/simple-login/website) | 43 | 33 | Added variables. Texts were permanently assigned. |
 | <img src="https://avatars.githubusercontent.com/u/4223?v=4" alt="Logo rails" width="30" height="30"> | [**rails**](https://github.com/rails) | [**website**](https://github.com/rails/website) | **74** | **109** | **Accessibility and Performance improvements** |
 | <img src="https://avatars.githubusercontent.com/u/14127308?v=4" alt="Logo EbookFoundation" width="30" height="30"> | [EbookFoundation](https://github.com/EbookFoundation) | [free-programming-books](https://github.com/EbookFoundation/free-programming-books) | 338393 | 61686 | fix typo |
