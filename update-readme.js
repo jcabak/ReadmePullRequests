@@ -3,10 +3,10 @@ const fetch = require('node-fetch');
 
 const username = 'jcabak';
 const accessToken = process.env.GH_TOKEN;
-const shouldBold = true; // bold favoriteRepositories
+const boldFavorites = true; // bold favoriteRepositories
 const includePullRequestLinks = false; // make url to specific pull request
 const favoriteRepositories = ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp'];
-const ignoredUsers = ['BinaryWorlds', 'LukasJoswiak'];
+const ignoredRepositories = ['BinaryWorlds', 'LukasJoswiak'];
 const show_open_pull_requests = true;
 const show_closed_pull_requests = true;
 
@@ -51,8 +51,8 @@ async function generateMarkdownTable(pullRequests, title) {
         const repositoryOwnerAvatarUrl = await fetchRepositoryOwnerAvatar(pullRequest.repository_url);
         const repositoryOwner = await fetchRepositoryOwner(pullRequest.repository_url);
 
-        // Ignore the repository if the owner is in the ignoredUsers list
-        if (ignoredUsers.includes(repositoryOwner)) {
+        // Ignore the repository if the owner is in the ignoredRepositories list
+        if (ignoredRepositories.includes(repositoryOwner)) {
             continue;
         }
 
@@ -66,7 +66,7 @@ async function generateMarkdownTable(pullRequests, title) {
 
         const pullRequestColumnContent = includePullRequestLinks ? `[${pullRequest.title}](${pullRequestLink})` : pullRequest.title;
 
-        if (shouldBold && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
+        if (boldFavorites && favoriteRepositories.includes(repositoryOwner.toLowerCase())) {
             markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [**${repositoryOwner}**](${repositoryOwnerUrl}) | [**${repositoryName}**](${repositoryUrl}) | **${repositoryStars}** | **${repositoryForks}** | **${pullRequestColumnContent}** |\n`;
         } else {
             markdownContent += `| <img src="${repositoryOwnerAvatarUrl}" alt="Logo ${repositoryOwner}" width="30" height="30"> | [${repositoryOwner}](${repositoryOwnerUrl}) | [${repositoryName}](${repositoryUrl}) | ${repositoryStars} | ${repositoryForks} | ${pullRequestColumnContent} |\n`;

@@ -54,10 +54,10 @@ Use the following `input params` to customize it for your use case:-
 
 | Input Param | Default Value | Description |
 |--------|--------|--------|
-| `shouldBold` | true | bold favorite repositories |
+| `boldFavorites` | true | bold favorite repositories |
 | `includePullRequestLinks` | false | make url to specific pull request |
 | `favoriteRepositories` | null | table for favorites users |
-| `ignoredUsers` | null | table for ignored users |
+| `ignoredRepositories` | null | table for ignored users |
 
 
 ```yml
@@ -79,10 +79,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          shouldBold: true
+          boldFavorites: true
           includePullRequestLinks: false
           favoriteRepositories : ['rails', 'microsoft', 'apple', 'home-assistant', 'google', 'raspberry', 'twitter', 'mozilla', 'facebook', 'googlechrome', 'nasa', 'w3c', 'basecamp']
-          ignoredUsers: ['BinaryWorlds', 'LukasJoswiak'];
+          ignoredRepositories: ['BinaryWorlds', 'LukasJoswiak'];
 ```
 
 ## Closed Pull Requests
